@@ -1,0 +1,30 @@
+# path-segment-extractor
+
+Extracts the directory, filename, basename, and extension components from a POSIX path string.
+
+## Usage
+
+```js
+import { splitPath, SegmentType } from 'path-segment-extractor';
+
+const { directory, filename, basename, extension, type } =
+  splitPath('/home/alice/archive.tar.gz');
+
+// directory  -> '/home/alice/'
+// filename   -> 'archive.tar.gz'
+// basename   -> 'archive.tar'
+// extension  -> 'gz'
+// type       -> SegmentType.NESTED  (== 'nested')
+```
+
+`SegmentType` is a frozen object with three string values: `FILE` (no slash in the path), `NESTED` (at least one slash, so a directory exists), and `EMPTY` (empty input, only slashes, or trailing slash with no filename).
+
+## Why this exists
+
+The standard library does not ship a `path`-style module that runs unchanged in the browser and in Node, and `path` on Node normalises paths in ways that quietly change semantics. This library is a small lexical extractor: it tells you what the *literal* path string contains without resolving `.` or `..`, collapsing repeated slashes, or touching the filesystem.
+
+The trade-off is that this is a *lexical* tool, not a *semantic* one. If you need to resolve `..` or join paths, use something else — or call this afterwards.
+
+## Edge you will hit
+
+The extension is the substring after the **last** dot in the final segment, but a dot at the start (`.bashrc`) or end (`report.`) is not treated as an extension separator. So `.bashrc` has no extension, and `.env.local` has basename `.env` and extension `local`. This matches the intuition most file managers use; it does not match every shell glob expansion.
