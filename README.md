@@ -28,3 +28,10 @@ The trade-off is that this is a *lexical* tool, not a *semantic* one. If you nee
 ## Edge you will hit
 
 The extension is the substring after the **last** dot in the final segment, but a dot at the start (`.bashrc`) or end (`report.`) is not treated as an extension separator. So `.bashrc` has no extension, and `.env.local` has basename `.env` and extension `local`. This matches the intuition most file managers use; it does not match every shell glob expansion.
+
+## Performance
+
+The window keeps a bounded buffer, so `push` is constant time and memory does not
+grow with the length of the stream. `peak` and `trough` are linear in the window
+size, which is the trade that keeps `push` cheap.
+
