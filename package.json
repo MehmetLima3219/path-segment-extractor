@@ -1,6 +1,6 @@
 {
   "name": "path-segment-extractor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Extracts filename, extension, basename, and directory components from paths with edge case handling.",
   "type": "module",
   "main": "src/index.js",
